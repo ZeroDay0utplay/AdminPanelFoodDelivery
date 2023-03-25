@@ -21,7 +21,6 @@ mongoose.connect("mongodb+srv://" + process.env.DB_USER + ":" + process.env.DB_P
 
 const auth = require("./exports/auth.js");
 const schemas = require("./exports/schemas.js");
-const { log } = require("console");
 
 const Command = mongoose.model("Command", schemas.cmdSchema);
 
@@ -33,8 +32,9 @@ app.get("/", async (req, res)=>{
 })
 
 
-app.post("/", (req, res)=>{
-
+app.post("/", async (req, res)=>{
+    const cmds = await Command.find({});
+    res.render("index", {cmds: change_cmd(cmds)})
 })
 
 

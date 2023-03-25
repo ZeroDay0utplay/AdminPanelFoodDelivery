@@ -4,17 +4,49 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Page</title>
+    <link rel="stylesheet" href="CSS/styles.css">
+
+    <title>Admin Panel</title>
 </head>
 <body>
     <div>
         <% for (let i=0; i<cmds.length; i++){%>
             <% let cmd = cmds[i]; %>
-            <h3><%= cmd.phone_number %></h3>
-            <% for (let key of Object.keys(cmd.desc)){%>
+            <div class="box container phone_number">
+                <h3><%= cmd.phone_number %></h3>
+            </div>
+            <div class="box desc">
                 <% let desc = cmd.desc; %>
-                <h4><%= key %> : <%= desc[key] %></h4>
-            <%}%>
+                <% for (let key of Object.keys(desc)){%>
+                    <% if (key == "salades" || key == "sauces"){%>
+                        <h4><%= key %> :</h4>
+                        <ul>
+                            <% desc[key].forEach((v, k) => { %>
+                            <li><%= k %>: <%= v %></li>
+                            <% }); %>
+                        </ul>
+                    <% } else { %>
+                        <% if (desc[key] != ""){%>
+                            <h4><%= key %> : <%= desc[key] %></h4>
+                        <%}%>
+                    <%}%>
+                <%}%>
+            </div>
+            <div>
+                <form action="/" method="post">
+                    <button class="btn btn2 done" type="submit">DONE</button>
+                  </form>
+            </div>
+            <div>
+                <form action="/" method="post">
+                    <button class="btn btn2 undone" type="submit">UNDONE</button>
+                  </form>
+            </div>
+            <div>
+                <form action="/" method="post">
+                    <button class="btn" type="submit">See More</button>
+                  </form>
+            </div>
         <%}%>
        
     </div>
