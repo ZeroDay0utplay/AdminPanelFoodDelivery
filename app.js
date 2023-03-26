@@ -54,15 +54,16 @@ app.listen(process.env.PORT || 3000, () => {
 
 
 function change_cmd(cmds){
-    const new_cmds = [];
     const all_cmds = [];
     for (let i=0; i<cmds.length; i++){
+        const new_cmds = [];
         const cmd = cmds[i];
         const phone_number = cmd._id;
         const commands = cmd.commands;
         for (let j=0; j<commands.length; j++){
             const command = commands[j];
             const desc = update_json(command, ["prod", "ingredient", "sauces", "salades", "Frites", "Size", "Pate", "price", "quantity", "delivery"]);
+            console.log(desc);
             new_cmds.push(desc);
         }
         const new_command = {"phone_number": phone_number, "commands": new_cmds};
