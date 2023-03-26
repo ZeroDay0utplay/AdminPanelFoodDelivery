@@ -27,7 +27,14 @@ const Command = mongoose.model("Command", schemas.cmdSchema);
 
 
 app.get("/", async (req, res)=>{
-    const cmds = await Command.find({});
+    const cmds = await Command.aggregate([
+        {
+          $group: {
+            _id: '$phone_number',
+            commands: { $push: '$$ROOT' } // group by number and put all commands in array
+          }
+        }
+    ]).exec();
     res.render("index", {cmds: change_cmd(cmds)})
 })
 
@@ -48,17 +55,20 @@ app.listen(process.env.PORT || 3000, () => {
 
 function change_cmd(cmds){
     const new_cmds = [];
+    const all_cmds = [];
     for (let i=0; i<cmds.length; i++){
         const cmd = cmds[i];
-        const phone_number = cmd.phone_number;
-        const desc = update_json(cmd, ["prod", "ingredient", "sauces", "salades", "Frites", "Size", "Pate", "price", "quantity", "delivery"]);
-        const new_cmd = {
-            "phone_number": phone_number,
-            "desc": desc
+        const phone_number = cmd._id;
+        const commands = cmd.commands;
+        for (let j=0; j<commands.length; j++){
+            const command = commands[j];
+            const desc = update_json(command, ["prod", "ingredient", "sauces", "salades", "Frites", "Size", "Pate", "price", "quantity", "delivery"]);
+            new_cmds.push(desc);
         }
-        new_cmds.push(new_cmd);
+        const new_command = {"phone_number": phone_number, "commands": new_cmds};
+        all_cmds.push(new_command);
     }
-    return new_cmds;
+    return all_cmds;
 }
 
 function update_json(json, includes){

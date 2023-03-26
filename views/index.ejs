@@ -10,45 +10,41 @@
 </head>
 <body>
     <div>
-        <% for (let i=0; i<cmds.length; i++){%>
-            <% let cmd = cmds[i]; %>
-            <div class="box container phone_number">
-                <h3><%= cmd.phone_number %></h3>
-            </div>
-            <div class="box desc">
-                <% let desc = cmd.desc; %>
-                <% for (let key of Object.keys(desc)){%>
-                    <% if (key == "salades" || key == "sauces"){%>
-                        <h4><%= key %> :</h4>
-                        <ul>
-                            <% desc[key].forEach((v, k) => { %>
-                            <li><%= k %>: <%= v %></li>
-                            <% }); %>
-                        </ul>
-                    <% } else { %>
-                        <% if (desc[key] != ""){%>
-                            <h4><%= key %> : <%= desc[key] %></h4>
+        <form action="/" method="post">
+            <% for (let i=0; i<cmds.length; i++){%>
+                <% let cmd = cmds[i]; %>
+                <div class="box container phone_number">
+                    <h3><%= cmd.phone_number %></h3>
+                </div>
+                <div class="box desc">
+                    <% let commands = cmd.commands; %>
+                    <% for (let j=0; j<commands.length; j++){%>
+                        <% let desc = commands[j]; %>
+                        <% for (let key of Object.keys(desc)){%>
+                            <% if (key == "salades" || key == "sauces"){%>
+                                <h4><%= key %> :</h4>
+                                <ul>
+                                    <%for (let k of Object.keys(desc[key])){%>
+                                        <li><%= k %>: <%= desc[key][k] %></li>
+                                    <%}%>
+                                </ul>
+                            <% } else { %>
+                                <% if (desc[key] != ""){%>
+                                    <h4><%= key %> : <%= desc[key] %></h4>
+                                <%}%>
+                            <%}%>
                         <%}%>
+                        <hr>
+                        <div>
+                            <button class="btn btn2 done" type="submit">DONE</button>
+                        </div>
+                        <div>
+                            <button class="btn btn2 undone" type="submit">UNDONE</button>
+                        </div>
                     <%}%>
-                <%}%>
-            </div>
-            <div>
-                <form action="/" method="post">
-                    <button class="btn btn2 done" type="submit">DONE</button>
-                  </form>
-            </div>
-            <div>
-                <form action="/" method="post">
-                    <button class="btn btn2 undone" type="submit">UNDONE</button>
-                  </form>
-            </div>
-            <div>
-                <form action="/" method="post">
-                    <button class="btn" type="submit">See More</button>
-                  </form>
-            </div>
-        <%}%>
-       
+                </div>
+            <%}%>
+        </form>
     </div>
 </body>
 </html>
